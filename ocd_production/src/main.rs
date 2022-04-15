@@ -6,6 +6,10 @@ use std::{
     str,
 };
 
+/// cargo run 
+//cd ~/ocd_production/ && cargo run --release ~/AllHoldings25_FC_AUS_M_20210712.xml.zip && cd ..
+
+
 use zip::ZipArchive;
 
 const BUF_SIZE: usize = 4096; // 4kb at once

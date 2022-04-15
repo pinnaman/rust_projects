@@ -1,0 +1,1 @@
+docker exec -it postgres_db_1 psql -h localhost -U postgres -f ./scripts/stats_db_setup.sql
