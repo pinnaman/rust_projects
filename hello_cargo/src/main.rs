@@ -2,13 +2,18 @@
 
 fn main() {
 
+    println!("Hello, RUST world!");
+
     const THREE_HOURS_IN_SECONDS: u32 = 60 * 60 * 3;
     println!("Three hours in seconds=> {}", THREE_HOURS_IN_SECONDS);
 
+    dtypes();
+    owner_borrow();
     functional_patterns();
+    /*
     string_stats();
-
-    //num_stats();
+    num_stats();
+    */
 
     //matrix();
 
@@ -17,12 +22,103 @@ fn main() {
     /*
     shadowing();
 
-    dtypes();
+    
 
     cli()
     */
     
 }
+
+#[allow(dead_code,warnings, unused_variables, unused_assignments)]
+fn dtypes() {
+
+    println!("#***********DATATYPES**********#");
+
+    let guess: u32 = "50".parse().expect("Not a number!");
+    println!("The value of guess is: {}", guess);
+    let x = 2.0; // f64 
+    let y: f32 = 3.0; // f32
+    println!("The value of floats is: {},{}", x,y);
+
+    println!("#********tuples**********#");
+    let tup: (i32, f64, u8) = (500, 6.4, 1);
+    let tup = (500, 6.4, 1);
+    let (x, y, z) = tup;
+    println!("The value of y is: {}", y);
+    let x: (i32, f64, u8) = (500, 6.4, 1);
+    let five_hundred = x.0;
+    let six_point_four = x.1;
+    let one = x.2;
+    println!("The value of x is: {},{},{}", five_hundred,six_point_four,one);
+
+    println!("#********arrays**********#");
+    let a = [1, 2, 3, 4, 5];
+    println!("The value of a is: {:?}", a);
+    let a: [i32; 5] = [1, 2, 3, 4, 5];
+    println!("The value of a is: {:?}", a);
+    let a = [3; 5];
+    println!("The value of a is: {:?}", a);
+
+    println!("#********STRUCT**********#");
+    struct User {
+        name: String,
+        email: String,
+        age: u32,
+      }
+    let mut user1 = User {
+        name: String::from("James"),
+        email: String::from("james@test.com"),
+        age: 25,
+    };
+    println!("{},{},{}", user1.name,user1.email,user1.age);
+    user1.age = 26;
+    println!("{},{},{}", user1.name,user1.email,user1.age);
+    struct User1(String, String, u32);
+    let user1 = User1(String::from("james"), String::from("james@test.com"), 25);
+    println!("TUPLE STRUCT=>{},{},{}", user1.0,user1.1,user1.2);
+
+    // Vectors and Hashmap
+
+    const PI: f32 = 3.14;
+    struct Point(f32, f32);
+    enum Shape {
+    Triangle(Point, Point, Point),
+    Rectangle(Point, Point, Point, Point),
+    Circle(Point, f32),
+    }
+    /*
+    fn get_area(shape: Shape) -> f32 {
+        match shape {
+          Shape::Triangle(pt1, pt2, pt3) => {
+            // Calculate 1/2 base * height
+          },
+          Shape::Rectangle(pt1, pt2, pt3, pt4) => {
+            // Calculate base * height
+          },
+          
+          Shape::Circle(center, radius) => (0.5) * radius * radius * PI
+        }
+    }
+    */
+
+    
+}
+
+#[allow(dead_code,warnings, unused_variables, unused_assignments)]
+fn owner_borrow() {
+// Niko 
+let mut name = String::from("Hello");
+println!("Before Update=>{}",name);
+update_str(&mut name);
+println!("After Update=>{}",name);
+
+fn update_str(name: &mut String) {
+    println!("Updating String");
+    name.push_str(" Ajay");
+}
+
+}
+
 
 #[allow(dead_code,warnings, unused_variables, unused_assignments)]
 fn functional_patterns() {
@@ -142,36 +238,6 @@ fn shadowing() {
     }
     println!("The value of x is: {}", x);
 
-}
-
-#[allow(dead_code,warnings, unused_variables, unused_assignments)]
-fn dtypes() {
-
-    let guess: u32 = "50".parse().expect("Not a number!");
-    println!("The value of guess is: {}", guess);
-
-    let x = 2.0; // f64
-    let y: f32 = 3.0; // f32
-    println!("The value of floats is: {},{}", x,y);
-
-    // tuples
-    let tup: (i32, f64, u8) = (500, 6.4, 1);
-    let tup = (500, 6.4, 1);
-    let (x, y, z) = tup;
-    println!("The value of y is: {}", y);
-
-    let x: (i32, f64, u8) = (500, 6.4, 1);
-    let five_hundred = x.0;
-    let six_point_four = x.1;
-    let one = x.2;
-    println!("The value of x is: {},{},{}", five_hundred,six_point_four,one);
-
-    //arrays
-    let a = [1, 2, 3, 4, 5];
-    let a: [i32; 5] = [1, 2, 3, 4, 5];
-    let a = [3; 5];
-    //println!("The value of a is: {}", a);
-    
 }
 
 #[allow(dead_code,warnings, unused_variables,unused_assignments)]
