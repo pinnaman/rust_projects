@@ -6,5 +6,8 @@ DROP table string_stats;
 CREATE TABLE string_stats (
   index serial,
   uid text,
-  ins_date DATE NOT NULL DEFAULT CURRENT_DATE
+  number_cnt smallint,
+  alpha_cnt smallint,
+  vowel_cnt smallint,
+  ins_date DATE NOT NULL DEFAULT NOW()
 );

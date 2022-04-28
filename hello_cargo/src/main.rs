@@ -10,10 +10,10 @@ fn main() {
     dtypes();
     owner_borrow();
     functional_patterns();
-    /*
+    
     string_stats();
     num_stats();
-    */
+    
 
     //matrix();
 

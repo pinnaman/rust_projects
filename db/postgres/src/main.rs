@@ -3,9 +3,6 @@ use postgres::{Client, NoTls};
 fn main() {
     println!("Hello, Postgres!");
     string_stats();
-
-    
-    //conn = db_connect(stats_db_url)
     dbconn();
     
 }
@@ -38,10 +35,19 @@ fn dbconn() {
      for _ in 0..10 {
          //println!("{}", Uuid::new_v4());
          //uuid_vec.push(Uuid::new_v4().to_string());
+         let uid = Uuid::new_v4().to_string();
+         //let str_length = &uid.chars().count();
+         let z_cnt = &uid.chars().filter(|c| *c == 'a').count();
+         let al_cnt = &uid.chars().filter(|c| c.is_alphabetic()).count();
+         let num_cnt = &uid.chars().filter(|c| c.is_numeric()).count();
+         println!("Count {},{},{},{}",uid,num_cnt,al_cnt,z_cnt);
+         
          conn.execute(
             "INSERT INTO string_stats (uid) VALUES ($1)",
-            &[&Uuid::new_v4().to_string()],
+            //&[&uid,&num_cnt,&al_cnt],
+            &[&uid],
         ).unwrap();
+        
      }
 
 }
@@ -54,6 +60,6 @@ fn string_stats() {
         uuid_vec.push(Uuid::new_v4().to_string());
     }
     println!("{:?}",uuid_vec);
-    println!("count 91: {}", uuid_vec.iter().filter(|&n| *n == 91.to_string()).count());
+    println!("count 9: {}", uuid_vec.iter().filter(|&n| *n == 9.to_string()).count());
 
 }
