@@ -30,6 +30,13 @@ fn main() {
 }
 
 #[allow(dead_code,warnings, unused_variables, unused_assignments)]
+fn file_manip() {
+
+    // https://raw.githubusercontent.com/matplotlib/sample_data/master/aapl.csv
+
+}
+
+#[allow(dead_code,warnings, unused_variables, unused_assignments)]
 fn dtypes() {
 
     println!("#***********DATATYPES**********#");
