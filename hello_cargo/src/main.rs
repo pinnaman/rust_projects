@@ -31,10 +31,14 @@ fn main() {
 
 fn m_learn() {
 
+    println!("#***********MLEARN**********#");
+
     use ndarray::prelude::*;
     let data_1d: Array1::<f32> = array![1.,2.,3.];
     let data_2d: Array2::<f32> = array![[1.,2.,3.],[4.,5.,6.]];
     println!("{}\n{}",data_1d,data_2d);
+
+    println!("#***********MLEARN**********#");
 
 }
 
@@ -117,11 +121,25 @@ fn dtypes() {
     }
     */
 
+    println!("#***********END DATATYPES**********#");
     
 }
 
 #[allow(dead_code,warnings, unused_variables, unused_assignments)]
 fn owner_borrow() {
+
+println!("#***********OWNER BORROW**********#");
+
+   println!("Shadowing");
+    let x = 5;
+    let x = x + 1;
+    {
+        let x = x * 3;
+        println!("The value of x in the inner scope is: {}", x);
+    }
+    println!("The value of x is: {}", x);
+    println!("End Shadowing");
+
 // Niko 
 let mut name = String::from("Hello");
 println!("Before Update=>{}",name);
@@ -133,6 +151,8 @@ fn update_str(name: &mut String) {
     name.push_str(" Ajay");
 }
 
+println!("#***********END OWNER BORROW**********#");
+
 }
 
 
@@ -141,7 +161,7 @@ fn functional_patterns() {
 
     println!("#**********FUNCTIONAL PATTERNS*******#");
     let psum: u64 = vec![1, 2, 3].into_iter().map(|x| x*x*x).sum();
-    println!("{:?}",psum);
+    println!("SUM CUBE=>{:?}",psum);
 
     let v = vec![-1, 2, -3, 4, 5].into_iter();
     let _positive_numbers: Vec<i32> = v
@@ -150,7 +170,7 @@ fn functional_patterns() {
         .inspect(|x| println!("After filter: {}", x))
         .collect();
 
-        println!("#**********END FUNCTIONSL PATTERNS*******#");
+    println!("#**********END FUNCTIONSL PATTERNS*******#");
 }
 
 #[allow(dead_code,warnings, unused_variables, unused_assignments)]
@@ -200,13 +220,15 @@ fn string_stats() {
 #[allow(dead_code,warnings, unused_variables, unused_assignments)]
 fn num_stats() {
 
+    println!("#********** NUMBER STATS*******#");
+
     use rand::{distributions::Uniform, distributions::Standard,Rng}; // 0.6.5
     
     let mut rng = rand::thread_rng();
-    let i:i32 = rng.gen_range(0,10);
+    let i:i32 = rng.gen_range(0,20);
     let f:f32 = rng.gen_range(0.0,10.0);
-    println!("Integer: {}", i);
-    println!("Float: {}", f);
+    println!("Random Integer=> {}", i);
+    println!("Random Float=> {}", f);
 
     let mut rng = rand::thread_rng();
     let range = Uniform::new(0, 20);
@@ -223,8 +245,8 @@ fn num_stats() {
     let values: Vec<u8> = rand::thread_rng().sample_iter(Standard).take(10).collect();
     println!("{:?}", values);
 
+    println!("#**********END NUMBER STATS*******#");
    
-
 }
 
 #[allow(dead_code,warnings, unused_variables, unused_assignments)]
@@ -272,41 +294,21 @@ fn class() {
 
 }
 
-#[allow(dead_code,warnings, unused_variables, unused_assignments)]
-fn shadowing() {
-   
-    let x = 5;
-    let x = x + 1;
-    {
-        let x = x * 3;
-        println!("The value of x in the inner scope is: {}", x);
-    }
-    println!("The value of x is: {}", x);
-
-}
-
 #[allow(dead_code,warnings, unused_variables,unused_assignments)]
 fn cli() {
 
     use std::io;
-
     let a = [1, 2, 3, 4, 5];
-
     println!("Please enter an array index less than 5.");
-
     let mut index = String::new();
-
     io::stdin()
         .read_line(&mut index)
         .expect("Failed to read line");
-
     let index: usize = index
         .trim()
         .parse()
         .expect("Index entered was not a number");
-
     let element = a[index];
-
     println!(
         "The value of the element at index {} is: {}",
         index, element
