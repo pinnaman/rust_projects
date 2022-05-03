@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 rand = "0.7.3"
 uuid = { version = "0.8", features = ["serde", "v4"] }
+ndarray = {version = "0.13.1"}

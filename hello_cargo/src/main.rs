@@ -1,5 +1,3 @@
-///extern crate rand;
-
 fn main() {
 
     println!("Hello, RUST world!");
@@ -13,6 +11,8 @@ fn main() {
     
     string_stats();
     num_stats();
+
+    m_learn();
     
 
     //matrix();
@@ -27,6 +27,15 @@ fn main() {
     cli()
     */
     
+}
+
+fn m_learn() {
+
+    use ndarray::prelude::*;
+    let data_1d: Array1::<f32> = array![1.,2.,3.];
+    let data_2d: Array2::<f32> = array![[1.,2.,3.],[4.,5.,6.]];
+    println!("{}\n{}",data_1d,data_2d);
+
 }
 
 #[allow(dead_code,warnings, unused_variables, unused_assignments)]
@@ -130,6 +139,7 @@ fn update_str(name: &mut String) {
 #[allow(dead_code,warnings, unused_variables, unused_assignments)]
 fn functional_patterns() {
 
+    println!("#**********FUNCTIONAL PATTERNS*******#");
     let psum: u64 = vec![1, 2, 3].into_iter().map(|x| x*x*x).sum();
     println!("{:?}",psum);
 
@@ -139,23 +149,51 @@ fn functional_patterns() {
         .filter(|x: &i32| x.is_positive())
         .inspect(|x| println!("After filter: {}", x))
         .collect();
+
+        println!("#**********END FUNCTIONSL PATTERNS*******#");
 }
 
 #[allow(dead_code,warnings, unused_variables, unused_assignments)]
 fn string_stats() {
 
+    println!("#**********STRING STATS*******#");
+
     use uuid::Uuid;
-     // uuid vector 
-     let mut uuid_vec: Vec<String> = Vec::new();
-     for _ in (0..10) {
-         //println!("{}", Uuid::new_v4());
-         uuid_vec.push(Uuid::new_v4().to_string());
-     }
-     println!("{:?}",uuid_vec);
-     //for value in uuid_vec {
-     //    println!("ITER: {}", value);
-     //}
-     println!("count 91: {}", uuid_vec.iter().filter(|&n| *n == 91.to_string()).count());
+    use std::collections::HashMap;
+    // uuid vector 
+    let mut uuid_vec: Vec<String> = Vec::new();
+    let mut letter_counts: HashMap<char,i32> = HashMap::new();
+
+    /*fn lc(input_string: &String) {
+        let char_vec: Vec<char> = input_string.to_lowercase().chars().collect();
+        println!("Input=>{:?},Chars=>{:?}",input_string,char_vec);
+        letter_counts = 
+        for c in char_vec {
+            *letter_counts.entry(c).or_insert(0) += 1;
+        }
+    }*/
+    
+    for _ in (0..10) {
+        //println!("{}", Uuid::new_v4());
+        uuid_vec.push(Uuid::new_v4().to_string());
+    }
+    println!("{:?}",uuid_vec);
+    println!("count 91: {}", uuid_vec.iter().filter(|&n| *n == 91.to_string()).count());
+
+    // loop vector
+    for uid_vec_string in &uuid_vec {
+        //lc(uid_vec_string)
+        letter_counts = uid_vec_string
+            .to_lowercase()
+            .chars()
+            .fold(HashMap::new(), |mut map, c| {
+                *map.entry(c).or_insert(0) += 1;
+                map
+            });
+    }
+    println!("{:?}", letter_counts);
+
+    println!("#**********END STRING STATS*******#");
 
 }
 
@@ -275,4 +313,3 @@ fn cli() {
     );
 
 }
-
