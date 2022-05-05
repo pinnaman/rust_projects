@@ -13,20 +13,39 @@ fn main() {
     num_stats();
 
     m_learn();
-    
-
+    parallel()
+/*
     //matrix();
-
     //class();
-    
-    /*
-    shadowing();
-
-    
-
     cli()
     */
     
+}
+
+#[allow(dead_code,warnings, unused_variables, unused_assignments)]
+fn parallel() {
+    use rayon::prelude::*;
+    use rand::{distributions::Uniform, distributions::Standard,Rng}; // 0.6.5
+
+    fn sum_of_squares(input: &[i32]) -> i32 {
+        input.par_iter()
+             .map(|&i| i * i)
+             .sum()
+    }
+    fn print_vec(v1: &[u64], v2: &[u64]) {
+        println!("{:?}<=>{:?}", v1,v2);
+    }
+    let mut a: i32 = 3;
+    let sos = sum_of_squares(&[a]);
+    println!("SOS=>{}",sos);
+
+    let mut rng = rand::thread_rng();
+    let range = Uniform::new(0, 20);
+    let vals_int1: Vec<u64> = (0..10).map(|_| rng.sample(&range)).collect();
+    let vals_int2: Vec<u64> = (0..10).map(|_| rng.sample(&range)).collect();
+    ///println!("Int Arr1=>{:?},Int Arr2=>{:?}", vals_int1, vals_int2);
+    print_vec(&vals_int1,&vals_int2); 
+
 }
 
 fn m_learn() {
@@ -99,21 +118,25 @@ fn dtypes() {
 
     // Vectors and Hashmap
 
+
+    // Enum types
     const PI: f32 = 3.14;
     struct Point(f32, f32);
     enum Shape {
-    Triangle(Point, Point, Point),
-    Rectangle(Point, Point, Point, Point),
-    Circle(Point, f32),
+        Triangle(Point, Point, Point),
+        Rectangle(Point, Point, Point, Point),
+        Circle(Point, f32),
     }
     /*
     fn get_area(shape: Shape) -> f32 {
         match shape {
           Shape::Triangle(pt1, pt2, pt3) => {
             // Calculate 1/2 base * height
+            .5
           },
           Shape::Rectangle(pt1, pt2, pt3, pt4) => {
             // Calculate base * height
+            1/2
           },
           
           Shape::Circle(center, radius) => (0.5) * radius * radius * PI
@@ -230,7 +253,7 @@ fn num_stats() {
     println!("Random Integer=> {}", i);
     println!("Random Float=> {}", f);
 
-    let mut rng = rand::thread_rng();
+    ///let mut rng = rand::thread_rng();
     let range = Uniform::new(0, 20);
     let vals_int1: Vec<u64> = (0..10).map(|_| rng.sample(&range)).collect();
     let vals_int2: Vec<u64> = (0..10).map(|_| rng.sample(&range)).collect();
