@@ -30,6 +30,7 @@ fn string_stats() {
 }
 
 fn pg_main() -> Result<(), Error> {
+    use regex::Regex;
     //let stats_db_url = "postgresql://postgres:postgres@localhost:5432/stats_db";
     let news_db_url = "postgresql://postgres:postgres@localhost:5432/news_db";
     let mut client= Client::connect(news_db_url, NoTls)?;
@@ -93,17 +94,16 @@ fn pg_main() -> Result<(), Error> {
 
     use uuid::Uuid;
     println!("#******STRING STATS************#");
+    let vowels = Regex::new(r"[aeiouy]").unwrap();
     for _ in 0..10 {
         //println!("{}", Uuid::new_v4());
         //uuid_vec.push(Uuid::new_v4().to_string());
         let uid = Uuid::new_v4().to_string();
         //let str_length = &uid.chars().count();
-        let z_cnt = &uid.chars().filter(|c| *c == 'a').count();
+        let z_cnt = &uid.chars().filter(|c| vowels.is_match(&c.to_string())).count();
         let al_cnt = &uid.chars().filter(|c| c.is_alphabetic()).count();
         let num_cnt = &uid.chars().filter(|c| c.is_numeric()).count();
         //println!("Count {},{},{},{}",uid,num_cnt,al_cnt,z_cnt);
-
-        //let num: i32 = 10;
         let z_32: i32 = *z_cnt as i32;
         let al_32: i32 = *al_cnt as i32;
         let num_32: i32 = *num_cnt as i32;
@@ -115,18 +115,14 @@ fn pg_main() -> Result<(), Error> {
         //&[&uid],
     )?;
     
-    
-    
     }
 
     struct User {
         name: String,email: String,age: i32
     }
-
     for row in &client.query("SELECT name,email,age FROM users", &[]).unwrap() {
         let user = User {name: row.get(0),email: row.get(1),age: row.get(2),};
         println!("Found student {} with email:{} aged=> {}", user.name, user.email, user.age);
     }
-
     return Ok(());
 }
