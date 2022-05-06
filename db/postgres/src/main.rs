@@ -3,64 +3,22 @@ use postgres::{Client, NoTls, Error};
 
 fn main() {
     println!("Hello, Postgres!");
-    string_stats();
-    //dbconn();
+    //string_stats();
     let res = pg_main();
     match res {
-        Ok(_) => {println!("Succeeded!");},
+        Ok(_) => {println!("DB Succeeded!");},
         Err(e) => {println!("Error: {}!", e);}
     }
     
 }
-/*
-fn dbconn() -> Result<(), Error>{
 
-    struct User {
-        username: String,
-        password: String
-    }
-
-    println!("DB Connection!");
-    let stats_db_url = "postgresql://postgres:postgres@localhost:5432/stats_db";
-    let mut conn = Client::connect(stats_db_url, NoTls).unwrap();
-
-    /*conn.execute(
-        "INSERT INTO app_user (username, password, email) VALUES ($1, $2, $3)",
-        &[&"user3", &"mypass3", &"user3@test.com"],
-    ).unwrap();
-    */
-
-    for row in &conn.query("SELECT username, password FROM app_user", &[]).unwrap() {
-        let user = User {
-            username: row.get(0),
-            password: row.get(1)
-        };
-        println!("Found student {} with ID:{}", user.username, user.password);
-    }
-
-    use uuid::Uuid;
-     for _ in 0..10 {
-         //println!("{}", Uuid::new_v4());
-         //uuid_vec.push(Uuid::new_v4().to_string());
-         let uid = Uuid::new_v4().to_string();
-         //let str_length = &uid.chars().count();
-         let z_cnt = &uid.chars().filter(|c| *c == 'a').count();
-         let al_cnt = &uid.chars().filter(|c| c.is_alphabetic()).count();
-         let num_cnt = &uid.chars().filter(|c| c.is_numeric()).count();
-         println!("Count {},{},{},{}",uid,num_cnt,al_cnt,z_cnt);
-         
-         conn.execute(
-            "INSERT INTO string_stats (uid,number_cnt,alpha_cnt) VALUES ($1,$2,$3)",
-            &[&uid,&num_cnt,&al_cnt],
-            //&[&uid],
-        )?;
-        
-     }
-
+#[allow(dead_code,warnings, unused_variables, unused_assignments)]
+fn print_type_of<T>(_: &T) {
+    println!("{}", std::any::type_name::<T>())
 }
-*/
-fn string_stats() {
 
+#[allow(dead_code,warnings, unused_variables, unused_assignments)]
+fn string_stats() {
     use uuid::Uuid;
     let mut uuid_vec: Vec<String> = Vec::new();
     for _ in 0..10 {
@@ -69,16 +27,25 @@ fn string_stats() {
     }
     println!("{:?}",uuid_vec);
     println!("count 9: {}", uuid_vec.iter().filter(|&n| *n == 9.to_string()).count());
-
 }
 
 fn pg_main() -> Result<(), Error> {
-    //let conn_string = "host=localhost port=5432 dbname=mmrust user=postgres password=postgres";
+    //let stats_db_url = "postgresql://postgres:postgres@localhost:5432/stats_db";
     let news_db_url = "postgresql://postgres:postgres@localhost:5432/news_db";
     let mut client= Client::connect(news_db_url, NoTls)?;
 
     println!("drop and create users and articles tables");
     client.batch_execute("drop table articles; drop table users;")?;
+    /*
+    CREATE TABLE string_stats (
+        index serial,
+        uid text,
+        number_cnt INTEGER,
+        alpha_cnt INTEGER NOT NULL,
+        vowel_cnt INTEGER,
+        ins_date TIMESTAMP NOT NULL DEFAULT NOW()
+      );
+      */
     client.batch_execute("\
         CREATE TABLE users (
             id    SERIAL PRIMARY KEY,
@@ -134,14 +101,21 @@ fn pg_main() -> Result<(), Error> {
         let z_cnt = &uid.chars().filter(|c| *c == 'a').count();
         let al_cnt = &uid.chars().filter(|c| c.is_alphabetic()).count();
         let num_cnt = &uid.chars().filter(|c| c.is_numeric()).count();
-        println!("Count {},{},{},{}",uid,num_cnt,al_cnt,z_cnt);
+        //println!("Count {},{},{},{}",uid,num_cnt,al_cnt,z_cnt);
+
+        //let num: i32 = 10;
+        let z_32: i32 = *z_cnt as i32;
+        let al_32: i32 = *al_cnt as i32;
+        let num_32: i32 = *num_cnt as i32;
+        //print_type_of(&num_32); 
         
-    /*   conn.execute(
-        "INSERT INTO string_stats (uid,alpha_cnt) VALUES ($1,$2)",
-        &[&uid,&al_size],
+       client.execute(
+        "INSERT INTO string_stats (uid,vowel_cnt,alpha_cnt,number_cnt) VALUES ($1,$2,$3,$4)",
+        &[&uid,&z_32,&al_32,&num_32],
         //&[&uid],
     )?;
-    */
+    
+    
     
     }
 
