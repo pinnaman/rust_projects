@@ -1,5 +1,5 @@
 [package]
-name = "postgres"
+name = "api"
 version = "0.1.0"
 edition = "2021"
 
@@ -15,3 +15,9 @@ regex = "1.5"
 actix-web = "3.3.3"
 dotenv = "0.15.0"
 dotenv_codegen = "0.15.0"
+actix-rt = "1.1.1"
+serde = { version = "1.0.123", features = ["derive"] }
+ndarray = { version = "0.13", default-features = false }
+ndarray-csv = "0.4"
+csv = "1.1"
+plotlib = "0.5.1"

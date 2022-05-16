@@ -8,17 +8,9 @@ use std::env;
 mod handlers;
 mod utils;
 
-async fn index(req: HttpRequest) -> &'static str {
-    println!("REQ: {:?}", req);
-    "Hello world!"
-}
-
-async fn home() -> impl Responder {
-    HttpResponse::Ok().body("Hello RUST:POSTGRES")
- }
-
-#[actix_web::main]
+#[actix_rt::main]
 async fn main() -> std::io::Result<()> {
+    println!("#*****Hello, API world!*********#");
 
     dotenv().ok();
     env::set_var("RUST_LOG", "actix_web=debug");
@@ -29,16 +21,14 @@ async fn main() -> std::io::Result<()> {
     // Start http server
     HttpServer::new(move || {
         App::new()
-            .route("/", web::get().to(home))
             .route("/users", web::get().to(handlers::get_users))
             .route("/users/{id}", web::get().to(handlers::get_user_by_id))
             .route("/users", web::post().to(handlers::add_user))
             .route("/users/{id}", web::delete().to(handlers::delete_user))
-            //.route("/stats", web::get().to(handlers::string_stats))
-            //.route("/nstats", web::get().to(handlers::num_stats))
+            .route("/stats", web::get().to(handlers::string_stats))
+            .route("/nstats", web::get().to(handlers::num_stats))
     })
     .bind(format!("{}:{}", host, port))?
     .run()
     .await
-
 }
