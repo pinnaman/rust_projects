@@ -2,6 +2,8 @@
 
 use actix_web::Responder;
 
+//use utils::*;
+
 pub async fn get_users() -> impl Responder {
     format!("hello from get users")
 }
@@ -72,4 +74,15 @@ pub async fn num_stats() -> impl Responder {
 
     format!("Random NUmbers=>{:?}",values)
    
+}
+
+
+pub async fn charts() -> impl Responder {
+
+    // data for charts
+    let data = crate::utils::get_fake_data();
+    //println!("FAKE DATA=>{:?}",data);
+
+    format!("Chart this DATA=>{:?}",data)
+
 }
