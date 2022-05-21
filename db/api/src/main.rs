@@ -2,7 +2,6 @@ use postgres::{Client, NoTls, Error};
 use actix_web::{web, App, HttpRequest, HttpServer, HttpResponse, Responder};
 use dotenv::dotenv;
 use std::env;
-//use chrono::prelude::Utc;
 
 // mod db_pg;
 mod handlers;
@@ -10,18 +9,8 @@ mod utils;
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
-    
-    println!("#*****Hello, API world!*********#");
 
-    // data for charts
-    //let data = utils::get_fake_data();
-    //println!("FAKE DATA=>{:?}",data);
-    // Convert timestamp to Date<Local>
-    /*let data: Vec<(Date<utils::Local>, f32, f32, f32, f32)> = data
-        .iter()
-        .map(|x| (utils::timestamp_to_local_date(x.0), x.1, x.2, x.3, x.4))
-        .collect();
-    */
+    println!("#*****Hello, API world!*********#");
 
     dotenv().ok();
     env::set_var("RUST_LOG", "actix_web=debug");

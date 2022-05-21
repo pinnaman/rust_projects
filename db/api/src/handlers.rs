@@ -1,8 +1,6 @@
-// src/handlers.rs
-
 use actix_web::Responder;
-
-//use utils::*;
+use chrono::prelude::*;
+use chrono::Duration;
 
 pub async fn get_users() -> impl Responder {
     format!("hello from get users")
@@ -83,6 +81,11 @@ pub async fn charts() -> impl Responder {
     let data = crate::utils::get_fake_data();
     //println!("FAKE DATA=>{:?}",data);
 
-    format!("Chart this DATA=>{:?}",data)
+    let data: Vec<(Date<Local>, f32, f32, f32, f32)> = data
+        .iter()
+        .map(|x| (crate::utils::timestamp_to_local_date(x.0), x.1, x.2, x.3, x.4))
+        .collect();
+
+        format!("Chart this DATA=>{:?}",data)
 
 }
