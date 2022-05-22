@@ -1,6 +1,4 @@
 use actix_web::Responder;
-use chrono::prelude::*;
-use chrono::Duration;
 
 pub async fn get_users() -> impl Responder {
     format!("hello from get users")
@@ -77,6 +75,10 @@ pub async fn num_stats() -> impl Responder {
 
 pub async fn charts() -> impl Responder {
 
+    use chrono::prelude::*;
+    use chrono::Duration;
+    use plotters::prelude::*;
+
     // data for charts
     let data = crate::utils::get_fake_data();
     //println!("FAKE DATA=>{:?}",data);
@@ -86,6 +88,88 @@ pub async fn charts() -> impl Responder {
         .map(|x| (crate::utils::timestamp_to_local_date(x.0), x.1, x.2, x.3, x.4))
         .collect();
 
-        format!("Chart this DATA=>{:?}",data)
+        let dir = "/Users/apinnamaneni/rust_projects/db/api/src/plots-output";
+        let filepath = format!("{}/sma15.png", &dir);
+        let root = BitMapBackend::new(&filepath, (1280, 960)).into_drawing_area();
+        root.fill(&WHITE).expect("Error filling background.");
+
+         // Get date range
+    let (end_date, start_date) = (
+        data[0].0 + Duration::days(1),
+        data[data.len() - 1].0 - Duration::days(1),
+    );
+    // Basic chart configuration
+    let mut chart = ChartBuilder::on(&root)
+        .x_label_area_size(60)
+        .y_label_area_size(60)
+        .caption(
+            "Candles + simple moving average",
+            ("sans-serif", 50.0).into_font(),
+        )
+        .build_cartesian_2d(start_date..end_date, 0f32..300f32)
+        .unwrap();
+    // prepare chart layout
+    chart
+        .configure_mesh()
+        .light_line_style(&WHITE)
+        .draw()
+        .unwrap();
+    
+    chart
+    .draw_series(data.iter().map(|x| {
+        CandleStick::new(
+            x.0,
+            x.1,
+            x.2,
+            x.3,
+            x.4,
+            RGBColor(98, 209, 61).filled(),
+            RGBColor(209, 61, 61).filled(),
+            10,
+        )
+    }))
+    .unwrap();
+    root.present().expect(&format!("Unable to write result to file please make sure directory '{}' exists under the current dir", &dir));
+    println!("Plot has been saved to {}", &filepath);
+
+    let close_price_data: Vec<f64> = data.iter().map(|x| x.4 as f64).collect();
+    let sma_data = crate::utils::simple_moving_average(&close_price_data, 15).expect("Calculating SMA failed");
+    let mut line_data: Vec<(Date<Local>, f32)> = Vec::new();
+    for i in 0..sma_data.len() {
+        line_data.push((data[i].0, sma_data[i] as f32));
+    }
+
+    chart
+        .draw_series(LineSeries::new(line_data, BLUE.stroke_width(2)))
+        .unwrap()
+        .label("SMA 15")
+        .legend(|(x, y)| PathElement::new(vec![(x, y), (x + 20, y)], &BLUE));
+
+
+    let sma_data = crate::utils::simple_moving_average(&close_price_data, 30).expect("Calculating SMA failed");
+    let mut line_data: Vec<(Date<Local>, f32)> = Vec::new();
+    for i in 0..sma_data.len() {
+        line_data.push((data[i].0, sma_data[i] as f32));
+    }
+
+    chart
+        .draw_series(LineSeries::new(
+            line_data,
+            RGBColor(150, 50, 168).stroke_width(2),
+        ))
+        .unwrap()
+        .label("SMA 30")
+        .legend(|(x, y)| PathElement::new(vec![(x, y), (x + 20, y)], &RGBColor(150, 50, 168)));
+
+    chart
+    .configure_series_labels()
+    .position(SeriesLabelPosition::UpperMiddle)
+    .label_font(("sans-serif", 30.0).into_font())
+    .background_style(WHITE.filled())
+    .draw()
+    .unwrap();
+
+    //format!("Chart this DATA=>{:?}",data)
+    format!("#********DATA CHARTS*********#")
 
 }

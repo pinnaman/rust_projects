@@ -1,3 +1,5 @@
+#![allow(dead_code, unused)]
+
 use postgres::{Client, NoTls, Error};
 use actix_web::{web, App, HttpRequest, HttpServer, HttpResponse, Responder};
 use dotenv::dotenv;
